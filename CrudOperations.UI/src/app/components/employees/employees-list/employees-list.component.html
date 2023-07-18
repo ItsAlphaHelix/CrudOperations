@@ -20,6 +20,7 @@
                 <td>{{employee.phoneNumber}}</td>
                 <td>{{employee.salary}}</td>
                 <td>{{employee.department}}</td>
+                <td><a [routerLink]="['/employees', 'edit', employee.id]">View</a></td>
             </tr>
         </tbody>
     </table>
