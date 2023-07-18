@@ -33,5 +33,58 @@
 
             return Ok(employeeRequest);
         }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetEmployee([FromRoute] Guid id)
+        {
+            var employee = await this.dbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(employee);
+        }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> EditEmployee([FromRoute] Guid id, Employee updateEmployee)
+        {
+            var employee = await this.dbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            employee.Name = updateEmployee.Name;
+            employee.PhoneNumber = updateEmployee.PhoneNumber;
+            employee.Email = updateEmployee.Email;
+            employee.Salary = updateEmployee.Salary;
+            employee.Department = updateEmployee.Department;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return Ok(employee);
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteEmployee([FromRoute] Guid id)
+        {
+            var employee = await this.dbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            this.dbContext.Employees.Remove(employee);
+            await this.dbContext.SaveChangesAsync();
+
+            return Ok(employee);
+        }
     }
 }
